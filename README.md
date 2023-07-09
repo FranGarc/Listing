@@ -1,6 +1,7 @@
 # About Listing
 
-This is just a simple app created through code challenges. Each challenge will be in a separate branch, this readme will contain the details for each
+This is just a simple app created through code challenges. 
+Each challenge will be in a separate branch, this readme will contain the details for each of them.
 
 ## Challenges history
 

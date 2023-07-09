@@ -1,35 +1,27 @@
 package com.franciscogarciagarzon.listing
 
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.franciscogarciagarzon.listing.ui.composables.InputComposable
+import com.franciscogarciagarzon.listing.ui.composables.SimpleListComposable
 import com.franciscogarciagarzon.listing.ui.theme.ListingTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val buttonAciton: (String) -> Unit = { enteredText ->
-            Toast.makeText(this, "entered: $enteredText!", Toast.LENGTH_SHORT).show()
-        }
-
         setContent {
-            ListingTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Greeting("Android")
-                    InputComposable(buttonAciton)
-                }
-            }
+            MainContent()
         }
     }
 
@@ -37,17 +29,31 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun MainContent() {
+    ListingTheme {
+
+        // lists aren't delegates to lists, hence no "by" for this
+        val elements: SnapshotStateList<String> = remember { mutableStateListOf<String>() }
+        val buttonAciton: (String) -> Unit = { enteredText ->
+            elements.add(enteredText)
+            Log.d("MainContent", "Button Clicked, current list: ${elements.toList()}")
+        }
+        // A surface container using the 'background' color from the theme
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Top
+        ) {
+            InputComposable(buttonAciton)
+            SimpleListComposable(elements = elements)
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun MainContentPreview() {
     ListingTheme {
-        Greeting("Android")
+        MainContent()
     }
 }

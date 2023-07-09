@@ -1,11 +1,16 @@
 package com.franciscogarciagarzon.listing.ui.composables
 
+import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,9 +37,9 @@ fun InputComposable(buttonAction: (String) -> Unit) {
         modifier =
         Modifier
             .padding(horizontal = 5.dp)
-            .fillMaxSize(),
+            .wrapContentHeight(),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
 
         )
     {
@@ -42,10 +47,24 @@ fun InputComposable(buttonAction: (String) -> Unit) {
             value = value,
             onValueChange = { newText ->
                 value = newText
+            },
+            trailingIcon = {
+                Icon(
+                    Icons.Default.Clear,
+                    contentDescription = "clear text",
+                    modifier = Modifier
+                        .clickable {
+                            value = ""
+                        }
+                )
             }
         )
         Button(
-            onClick = { buttonAction(value) },
+            onClick = {
+                Log.d("InputComposable", "Button clicked, value = $value")
+                buttonAction(value)
+                value = ""
+            },
             modifier = Modifier.padding(horizontal = 10.dp),
         ) {
             Text(text = "Enter")
