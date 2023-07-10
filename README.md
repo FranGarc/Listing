@@ -7,11 +7,13 @@ Each challenge will be in a separate branch, this readme will contain the detail
 
 * First Challenge: Create a simple list app
   ![Simple List App](https://github.com/FranGarc/Listing/blob/develop/screenshots/challenge1.png)
+* First Challenge: Allow items in the list to be deleted or edited.
 
 ### Current challenge requisites
 
-First Challenge: Create a simple list app
+ Challenge: Allow items in the list to be deleted or edited
 
-* App needs to allow the user to input items and display them as a scrollable list.
-* There's no need for persistence. The list will be reset each time the app is launched.
+* Each item element will show a button for Delete and a button for Edit.
+* Delete should remove said element from the list.
+* Edit should allow the user to change that element value. 
 
