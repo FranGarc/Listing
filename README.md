@@ -5,16 +5,18 @@ Each challenge will be in a separate branch, this readme will contain the detail
 
 ## Challenges history
 
+* Third Challenge: MVVM and flow
+* Second Challenge: Allow items in the list to be deleted or edited.
+    ![Editable List App](https://github.com/FranGarc/Listing/blob/develop/screenshots/challenge2.png)
+
 * First Challenge: Create a simple list app
   ![Simple List App](https://github.com/FranGarc/Listing/blob/develop/screenshots/challenge1.png)
-* First Challenge: Allow items in the list to be deleted or edited.
-  ![Editable List App](https://github.com/FranGarc/Listing/blob/develop/screenshots/challenge2.png)
 
 ### Current challenge requisites
 
- Challenge: Allow items in the list to be deleted or edited
+ Challenge: MVVM and flow
 
-* Each item element will show a button for Delete and a button for Edit.
-* Delete should remove said element from the list.
-* Edit should allow the user to change that element value. 
+* Adopt MVVM presentation pattern. Move all logic (add, edit, remove) to a ViewModel class.
+* Create a Flow on the ViewModel class to take care of the list (as per good practices, a private mutable and a public non mutable, so the View cannot alter it unless through ViewModel's public methods)
+* Since we're dealing with Strings so far, there's no need to create a Model 
 

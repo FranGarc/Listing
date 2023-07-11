@@ -34,7 +34,7 @@ fun MainContent() {
 
         // lists aren't delegates to lists, hence no "by" for this
         val elements: SnapshotStateList<String> = remember { mutableStateListOf<String>() }
-        val buttonAciton: (String) -> Unit = { enteredText ->
+        val buttonAction: (String) -> Unit = { enteredText ->
             elements.add(enteredText)
             Log.d("MainContent", "Button Clicked, current list: ${elements.toList()}")
         }
@@ -44,7 +44,7 @@ fun MainContent() {
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Top
         ) {
-            InputComposable(buttonAciton)
+            InputComposable(buttonAction)
             EditableListComposable(elements = elements)
         }
     }
