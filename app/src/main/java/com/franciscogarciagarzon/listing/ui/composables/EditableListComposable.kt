@@ -27,7 +27,11 @@ import com.franciscogarciagarzon.listing.ui.theme.ListingTheme
 
 
 @Composable
-fun EditableListComposable(elements: SnapshotStateList<String>) {
+fun EditableListComposable(
+    elements: SnapshotStateList<String>,
+    editAction: (Int, String) -> Unit,
+    deleteAction: (Int) -> Unit,
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -48,12 +52,12 @@ fun EditableListComposable(elements: SnapshotStateList<String>) {
             }
             Spacer(modifier = Modifier.height(height = 8.dp)) // extra space below the heading
         }
-        itemsIndexed(elements) { _index,item ->
+        itemsIndexed(elements) { _index, item ->
             EditableListItemComposable(
                 originalValue = item,
                 index = _index,
-                editAction = {pos, newValue -> elements[pos] = newValue},
-                deleteAction = {pos -> elements.removeAt(pos)}
+                editAction = { pos, newValue -> editAction(pos, newValue) },
+                deleteAction = { pos -> deleteAction(pos) }
             )
         }
     }
@@ -67,6 +71,10 @@ fun EditableListComposable(elements: SnapshotStateList<String>) {
 fun EditableListComposablePreview() {
     val fruits = mutableStateListOf<String>("Apple", "Mango", "Banana", "Orange", "Watermelon", "Papaya", "other fruit", "yet another fruit")
     ListingTheme {
-        EditableListComposable(fruits)
+        EditableListComposable(
+            elements = fruits,
+            deleteAction = { _ -> },
+            editAction = { _, _ -> }
+        )
     }
 }

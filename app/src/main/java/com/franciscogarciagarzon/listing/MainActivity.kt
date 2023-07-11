@@ -1,9 +1,9 @@
 package com.franciscogarciagarzon.listing
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,10 +18,17 @@ import com.franciscogarciagarzon.listing.ui.composables.InputComposable
 import com.franciscogarciagarzon.listing.ui.theme.ListingTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel by viewModels<MainViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainContent()
+            MainContent(
+                elements = viewModel.elements,
+                addAction = { element -> viewModel.addElementToList(element) },
+                deleteAction = { index -> viewModel.delete(index) },
+                editAction = { index, newElement -> viewModel.editElement(index, newElement) }
+            )
         }
     }
 
@@ -29,23 +36,24 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun MainContent() {
+fun MainContent(
+    elements: SnapshotStateList<String>,
+    addAction: (String) -> Unit,
+    editAction: (Int, String) -> Unit,
+    deleteAction: (Int) -> Unit,
+) {
     ListingTheme {
-
-        // lists aren't delegates to lists, hence no "by" for this
-        val elements: SnapshotStateList<String> = remember { mutableStateListOf<String>() }
-        val buttonAction: (String) -> Unit = { enteredText ->
-            elements.add(enteredText)
-            Log.d("MainContent", "Button Clicked, current list: ${elements.toList()}")
-        }
-        // A surface container using the 'background' color from the theme
         Column(
             modifier = Modifier
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Top
         ) {
-            InputComposable(buttonAction)
-            EditableListComposable(elements = elements)
+            InputComposable(addAction)
+            EditableListComposable(
+                elements = elements,
+                editAction = editAction,
+                deleteAction = deleteAction,
+            )
         }
     }
 }
@@ -54,6 +62,11 @@ fun MainContent() {
 @Composable
 fun MainContentPreview() {
     ListingTheme {
-        MainContent()
+        MainContent(
+            elements = remember { mutableStateListOf<String>() },
+            addAction = { _ -> },
+            editAction = { _, _ -> },
+            deleteAction = { _ -> },
+        )
     }
 }
