@@ -8,6 +8,7 @@ Each challenge will be in a separate branch, this readme will contain the detail
 * First Challenge: Create a simple list app
   ![Simple List App](https://github.com/FranGarc/Listing/blob/develop/screenshots/challenge1.png)
 * First Challenge: Allow items in the list to be deleted or edited.
+  ![Editable List App](https://github.com/FranGarc/Listing/blob/develop/screenshots/challenge2.png)
 
 ### Current challenge requisites
 
