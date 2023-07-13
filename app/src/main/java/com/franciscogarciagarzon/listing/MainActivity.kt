@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.franciscogarciagarzon.listing.ui.composables.EditableListComposable
@@ -24,7 +26,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MainContent(
-                elements = viewModel.elements,
+                //viewModel.elements.value doesn't register any changes, so we need to use collectAsState
+                elements = viewModel.elements.collectAsState().value.toMutableStateList(),
                 addAction = { element -> viewModel.addElementToList(element) },
                 deleteAction = { index -> viewModel.delete(index) },
                 editAction = { index, newElement -> viewModel.editElement(index, newElement) }

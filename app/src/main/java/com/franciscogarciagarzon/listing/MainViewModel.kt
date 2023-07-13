@@ -1,24 +1,31 @@
 package com.franciscogarciagarzon.listing
 
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class MainViewModel : ViewModel() {
 
-
-    private val _elements = mutableStateListOf<String>()
-    val elements: SnapshotStateList<String> = _elements
+    // because of this simple case, we just need to initialise it and collect wherever we need to get the changes
+    private val _elements: MutableStateFlow<MutableList<String>> = MutableStateFlow(mutableStateListOf<String>())
+    val elements: StateFlow<List<String>> = _elements
 
     fun addElementToList(element: String) {
-        _elements.add(element)
+        val tempList = _elements.value.toMutableList()
+        tempList.add(element)
+        _elements.value = tempList
     }
 
     fun editElement(index: Int, element: String) {
-        _elements[index] = element
+        val tempList = _elements.value.toMutableList()
+        tempList[index] = element
+        _elements.value = tempList
     }
 
     fun delete(index: Int) {
-        _elements.removeAt(index)
+        val tempList = _elements.value.toMutableList()
+        tempList.removeAt(index)
+        _elements.value = tempList
     }
 }
