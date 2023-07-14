@@ -5,6 +5,7 @@ Each challenge will be in a separate branch, this readme will contain the detail
 
 ## Challenges history
 
+* Fifth Challenge: Room Database
 * Fourth Challenge: Dependency Injection
 * Third Challenge: MVVM and flow
 * Second Challenge: Allow items in the list to be deleted or edited.
@@ -15,20 +16,20 @@ Each challenge will be in a separate branch, this readme will contain the detail
 
 ### Current challenge requisites
 
-Challenge: Dependency Injection
+Challenge: Room Database
 
-* Add the dependencies needed for Dagger Hilt.
-* Create the following packages (your app package name may vary): com.franciscogarciagarzon.listing.data and com.franciscogarciagarzon.listing,domain) - these will simulate separate modules as per Clean Architecture
-* Within data, create subpackage local and add a dummy Interface LocalDatabase with the suspend function signature doDatabaseCall()
-* Within data/local and add a dummy class LocalDatabaseImpl that extends LocalDatabase Interface and implements the doDatabaseCall function (just have it print a log so we can see it works).
-* Within data, create subpackage repository and add a dummy class Repository that calls the suspend function in the dummy Interface LocalDatabase
-* Within domain, create subpackage repository and add a class RepositoryImpl that implements the Repository interface and overrides the doDatabaseCall function (calls the LocalDatabase method).
-* Have the RepositoryImpl get the LocalDatabase dependecy via constructor
-* Create the  (your app package name may vary): com.franciscogarciagarzon.listing.di (dependency injection) package. Use it to create the DaggerHilt app module to hold the singletons like our database dummy (SingletonComponent).
-* In the app module, add the @Provides function to provide our @Singleton database dependency
-* @Inject in the ViewModel's constructor the repository we created earlier, so we can use it from there. You'll need to add the @Provides function in the app module to provide the repository @Singleton, similar to what you just did.
-* Change in MainActivity the way you instantiate the ViewModel, since now is a hiltViewModel
-* Add @AndroidEntryPoint to the MainActivity
-* Create a class that extends Application and annotate it with @HiltAndroidApp - you may need to inject the app context in the future. You'll need to add it to the manifest.
+* Add the dependencies needed for Room.
+* Work is to be done in data/local/database package.
+* All Database work is I/O work. As such, it is to be done in coroutines, therefore all database functions (read, insert, etc) need to be _suspend fun_.
+* Create an entity Element with an Int @PrimaryKey and a @NonNull String field for the value.
+* Define the @Dao interface _Listing_. The _DataBase_ interface from the previous challenge can be refactored for this. Add a @Query to get all the elements from the database, with a return of type Flow<List<Element>>. Also, create an @Insert function to add a new Element (returns a Flow<Unit>)
+* Create an abstract class to extend RoomDatabase. The _LocalDatabase_ class from the previous challenge can be refactored for this. Add it an abstract function that returns the @Dao entity created in the previous step.
+* Add the @Provides function to the AppModule using "database/listing.db" as database file.
+* Add a function _getAllElements_ to the Repository, with a return type of Flow<List<String>>. It will call the database method and convert the Flow<List<Element>> into Flow<List<String>>. Also add the _insertElement_ function to call the database @Insert function - no need to change the return type
+  here.
+* Make changes to the ViewModel so that the add function calls the database @Insert.
+* Add an _init_ block to the ViewModel to call the "get all" @Query so the list gets loaded with each start of the app. Make the necessary changes in the Activity for the list to be displayed.
+* Add a StateFlow variable in the ViewModel to alert the Activity of state changes such as _loading_, _ready_, or _error_. Activity will display some sort of information (Snackbar, Toast, etc) to alert the user of the current state.
+* Change the _edit_ and _delete_ functions in the ViewModel so that they emit the _error_ state. The message will be "Functionality currently not available"
 
-Additional resources: https://www.youtube.com/watch?v=bbMsuI2p1DQ (though the video uses network calls, which we're not doing just yet)
+Additional resources: https://developer.android.com/codelabs/basic-android-kotlin-training-intro-room-flow?hl=es-419#0
