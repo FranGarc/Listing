@@ -3,7 +3,6 @@ package com.franciscogarciagarzon.listing
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,16 +14,19 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.franciscogarciagarzon.listing.ui.composables.EditableListComposable
 import com.franciscogarciagarzon.listing.ui.composables.InputComposable
 import com.franciscogarciagarzon.listing.ui.theme.ListingTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel by viewModels<MainViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val viewModel = hiltViewModel<MainViewModel>()
             MainContent(
                 //viewModel.elements.value doesn't register any changes, so we need to use collectAsState
                 elements = viewModel.elements.collectAsState().value.toMutableStateList(),
