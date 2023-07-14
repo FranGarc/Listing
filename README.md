@@ -21,7 +21,7 @@ Challenge: Dependency Injection
 * Create the following packages (your app package name may vary): com.franciscogarciagarzon.listing.data and com.franciscogarciagarzon.listing,domain) - these will simulate separate modules as per Clean Architecture
 * Within data, create subpackage local and add a dummy Interface LocalDatabase with the suspend function signature doDatabaseCall()
 * Within data/local and add a dummy class LocalDatabaseImpl that extends LocalDatabase Interface and implements the doDatabaseCall function (just have it print a log so we can see it works).
-* Within data, create subpackage repository and adda dummy class Repository that calls the suspend function in the dummy Interface LocalDatabase
+* Within data, create subpackage repository and add a dummy class Repository that calls the suspend function in the dummy Interface LocalDatabase
 * Within domain, create subpackage repository and add a class RepositoryImpl that implements the Repository interface and overrides the doDatabaseCall function (calls the LocalDatabase method).
 * Have the RepositoryImpl get the LocalDatabase dependecy via constructor
 * Create the  (your app package name may vary): com.franciscogarciagarzon.listing.di (dependency injection) package. Use it to create the DaggerHilt app module to hold the singletons like our database dummy (SingletonComponent).
