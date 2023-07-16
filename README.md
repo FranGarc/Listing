@@ -11,20 +11,23 @@ Challenge: Room Database
 
 * We're adapting more of the Clean Architecture practices, so by the end of this the data and domain packages structure should look like this
 
-```
-/data
-    Repository class
-    /datasources
-        /local (could be cache, remote)
-            /database (could be SharedPrefs, sensors, or APIs for remote)
-                /dto
-                -database Dao interface
-                -database abstract class
-/domain
-    /usecases
-    /entities
-    RepositoryContract
-```
+    ```
+    /data
+        Repository class
+        /datasources
+            /local 
+                /database 
+                    /dto
+                        entities
+                    -database Dao interface
+                    -database abstract class
+    /domain
+        /usecases
+        /model
+            entities
+        /repository
+            RepositoryContract
+    ```
 
 * Since all Database work is I/O work, it is to be done in coroutines as to not block the Main (UI) thread. Therefore all database functions (read, insert, etc) need to be _suspend fun_.
 
@@ -46,6 +49,18 @@ Challenge: Room Database
 * Add a function _getAllElements_ to the Repository contract (the interface in Domain package), with a return type of Flow<List<Element>>. It will call the database method and convert the Flow<List<ElementDto>> into Flow<List<Element>>. Also add the _insertElement_ function to call the database
   @Insert function - no need to change the return
   type here.
+* Create an UseCase for getting the list elements (_GetElementsUseCase_) and another for adding a new element (_AddElementUseCase_). They will call the repository functions created above. You can use the below example as a guidance.
+    ```
+    class SampleUseCase @Inject constructor(
+        private val repository: RepositoryContract
+    ) {
+        suspend operator fun invoke(): Flow<ResponseType> {
+            val response = repository.sampleGet()
+            //here you can add some domain logic or call another UseCase
+            return response
+        }
+    }
+    ```
 
 [Data]
 
@@ -53,8 +68,8 @@ Challenge: Room Database
 
 [Presentation]
 
-* Make changes to the ViewModel so that the add function calls the database @Insert.
-* Add an _init_ block to the ViewModel to call the "get all" @Query so the list gets loaded with each start of the app. Make the necessary changes in the Activity for the list to be displayed.
+* Make changes to the ViewModel so that the add function calls the _AddElementUseCase_.
+* Add an _init_ block to the ViewModel to call the _GetElementsUseCase_ so the list gets loaded with each start of the app. Make the necessary changes in the Activity for the list to be displayed.
 * Add a StateFlow variable in the ViewModel to alert the Activity of state changes such as _loading_, _ready_, or _error_. Activity will display some sort of information (Snackbar, Toast, etc) to alert the user of the current state.
 * Change the _edit_ and _delete_ functions in the ViewModel so that they emit the _error_ state. The message will be "Functionality currently not available"
 
