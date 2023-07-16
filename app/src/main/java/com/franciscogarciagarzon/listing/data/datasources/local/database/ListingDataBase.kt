@@ -8,7 +8,7 @@ import com.franciscogarciagarzon.listing.data.datasources.local.database.dto.Ele
     entities = [ElementDto::class],
     version = 1
 )
-abstract class DataBase : RoomDatabase() {
+abstract class ListingDataBase : RoomDatabase() {
 
     abstract val listingDao: ListingDao
 

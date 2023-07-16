@@ -41,7 +41,7 @@ Challenge: Room Database
 
 [Dependency Injection]
 
-* Add the @Provides function to the AppModule to initialize the Database singleton using "database/listing.db" as database file.
+* Add the @Provides function to the AppModule to initialize the Database singleton.
 
 [Domain]
 

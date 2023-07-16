@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -23,12 +22,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.franciscogarciagarzon.listing.domain.entities.Element
 import com.franciscogarciagarzon.listing.ui.theme.ListingTheme
 
 
 @Composable
 fun EditableListComposable(
-    elements: SnapshotStateList<String>,
+    elements: List<Element>,
     editAction: (Int, String) -> Unit,
     deleteAction: (Int) -> Unit,
 ) {
@@ -54,7 +54,7 @@ fun EditableListComposable(
         }
         itemsIndexed(elements) { _index, item ->
             EditableListItemComposable(
-                originalValue = item,
+                originalValue = item.value,
                 index = _index,
                 editAction = { pos, newValue -> editAction(pos, newValue) },
                 deleteAction = { pos -> deleteAction(pos) }
@@ -69,7 +69,7 @@ fun EditableListComposable(
 @Preview(showBackground = true)
 @Composable
 fun EditableListComposablePreview() {
-    val fruits = mutableStateListOf<String>("Apple", "Mango", "Banana", "Orange", "Watermelon", "Papaya", "other fruit", "yet another fruit")
+    val fruits = mutableStateListOf<Element>(Element(value = "Thing"))
     ListingTheme {
         EditableListComposable(
             elements = fruits,
